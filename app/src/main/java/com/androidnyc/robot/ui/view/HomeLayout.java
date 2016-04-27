@@ -8,10 +8,12 @@ import com.androidnyc.robot.R;
 import com.androidnyc.robot.api.Api;
 import com.androidnyc.robot.dagger.Injector;
 import com.androidnyc.robot.rx.RobotSchedulers;
+import com.androidnyc.robot.rx.SubscriptionHelper;
 import com.androidnyc.robot.ui.lifecycle.Lifecycle;
 
 import javax.inject.Inject;
 
+import rx.Subscription;
 import timber.log.Timber;
 
 public class HomeLayout extends RelativeLayout implements Lifecycle {
@@ -21,6 +23,8 @@ public class HomeLayout extends RelativeLayout implements Lifecycle {
   protected boolean isPaused;
 
   protected Object result;
+
+  private Subscription subscription;
 
   public HomeLayout(Context context) {
     super(context);
@@ -34,11 +38,11 @@ public class HomeLayout extends RelativeLayout implements Lifecycle {
 
   @Override public void onResume() {
     isPaused = false;
-    api.getWeather(40.712f,74.005f)
+    subscription = api.getWeather(40.712f,74.005f)
       .compose(RobotSchedulers.applyDefault())
       .subscribe(res-> {
         Timber.i(res.toString());
-        this.result = result;
+        this.result = res;
       },error-> {
         Timber.e(error,error.getMessage());
       });
@@ -47,6 +51,8 @@ public class HomeLayout extends RelativeLayout implements Lifecycle {
 
   @Override public void onPause() {
     isPaused = true;
+    SubscriptionHelper.unsubscribe(subscription);
+    subscription = null;
   }
 
   @Override public void onDestroy() {
