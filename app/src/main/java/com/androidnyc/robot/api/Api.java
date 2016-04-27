@@ -10,6 +10,6 @@ public interface Api {
   //f28484e6e35893c0002dfe36d437da1e
   @Headers("Content-Type: application/json")
   @GET("weather")
-  Observable<ScoreboardResponse > getScoreboard(@Query("lat") Float lat, @Query("lng") Float lng);
+  Observable<Object> getScoreboard(@Query("lat") Float lat, @Query("lng") Float lng);
 
 }

@@ -26,7 +26,6 @@ public class HomeLayoutTest {
     subject = new HomeLayout(ShadowApplication.getInstance().getApplicationContext());
   }
 
-
   @Test
   public void onHomeLayout_hasNoChildren() {
     assertThat(subject.getChildCount()).isEqualTo(0);
