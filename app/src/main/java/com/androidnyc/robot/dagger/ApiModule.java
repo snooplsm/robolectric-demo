@@ -25,10 +25,6 @@ import retrofit2.RxJavaCallAdapterFactory;
 import com.androidnyc.robot.RobotApplication;
 import com.androidnyc.robot.api.Api;
 import com.androidnyc.robot.api.ApiRequestInterceptor;
-import com.androidnyc.robot.gson.GameConverter;
-import com.androidnyc.robot.gson.LatLngTypeAdapter;
-import com.androidnyc.robot.gson.NewYorkDateTypeAdapter;
-import com.androidnyc.robot.gson.ScheduleConverter;
 import com.androidnyc.robot.ui.activity.BaseActivity;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -78,18 +74,6 @@ public class ApiModule {
 
     return gson = new GsonBuilder()
       .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-      .registerTypeAdapter(Scoreboard.class, new ScheduleConverter() {
-        @Override protected Gson getGson() {
-          return gson;
-        }
-      })
-      .registerTypeAdapter(Game.class, new GameConverter() {
-        @Override public Gson getGson() {
-          return gson;
-        }
-      })
-      .registerTypeAdapter(Date.class, new NewYorkDateTypeAdapter())
-      .registerTypeAdapter(LatLng.class, new LatLngTypeAdapter())
       .create();
   }
 
