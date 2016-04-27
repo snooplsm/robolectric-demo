@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 
+import com.androidnyc.robot.R;
 import com.androidnyc.robot.dagger.Injector;
 import com.androidnyc.robot.support.SessionManager;
 import com.androidnyc.robot.ui.view.HomeLayout;
@@ -23,6 +24,7 @@ public class BaseActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     Injector.obtain(getApplicationContext()).inject(this);
     root = new HomeLayout(this);
+    root.setId(R.id.root_view);
     setContentView(root);
     traverse(root, lifecycle -> {
       lifecycle.onCreate(savedInstanceState);

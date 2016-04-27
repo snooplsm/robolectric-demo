@@ -1,14 +1,20 @@
 package com.androidnyc.robot.ui.view;
 
+import android.app.Activity;
+
 import com.androidnyc.robot.BuildConfig;
+import com.androidnyc.robot.R;
 import com.androidnyc.robot.api.Api;
+import com.androidnyc.robot.ui.activity.BaseActivity;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowApplication;
+import org.robolectric.util.ActivityController;
 
 import javax.inject.Inject;
 
@@ -22,13 +28,26 @@ public class HomeLayoutTest {
 
   private HomeLayout subject;
 
+  private BaseActivity activity;
+
+  private ActivityController<BaseActivity> controller;
+
   @Before public void setUp() throws Exception {
-    subject = new HomeLayout(ShadowApplication.getInstance().getApplicationContext());
+    controller = Robolectric.buildActivity(BaseActivity.class);
+    activity = controller.setup().get();
+    subject = (HomeLayout) activity.findViewById(R.id.root_view);
   }
 
   @Test
   public void onHomeLayout_hasNoChildren() {
     assertThat(subject.getChildCount()).isEqualTo(0);
+  }
+
+  @Test
+  public void onPause_setsPausedVariable() {
+    assertThat(subject.isPaused).isFalse();
+    controller.pause();
+    assertThat(subject.isPaused).isTrue();
   }
 
 }
