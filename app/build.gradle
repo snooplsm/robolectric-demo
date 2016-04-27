@@ -1,0 +1,122 @@
+buildscript {
+  dependencies {
+    classpath 'me.tatarka:gradle-retrolambda:3.2.3'
+    classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
+  }
+
+  configurations.classpath.exclude group: 'com.android.tools.external.lombok'
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+
+def ipAddress = getLocalIp("en0")
+def server = "http://"+ipAddress+":9090/api/"
+println "ip address is " + ipAddress
+
+
+android {
+  compileSdkVersion 23
+  buildToolsVersion "23.0.2"
+
+  defaultConfig {
+    applicationId "com.androidnyc.robot"
+    minSdkVersion 21
+    targetSdkVersion 23
+    versionCode 1
+    versionName "1.0"
+    buildConfigField 'String', 'API_ENDPOINT', '"http://api.openweathermap.org/data/2.5/"'
+    buildConfigField 'String', 'WEATHER_API_KEY', '"f28484e6e35893c0002dfe36d437da1e"'
+    buildConfigField 'String', 'ENDPOINT', '"http://wmwm.us"'
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+
+  flavorDimensions "environment"
+
+  productFlavors {
+    dev {
+      buildConfigField 'String', 'API_ENDPOINT', "\"${server}\""
+      dimension "environment"
+    }
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+}
+
+dependencies {
+  compile 'io.reactivex:rxandroid:1.1.0'
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+
+  compile 'com.pusher:pusher-java-client:1.0.1'
+  compile 'com.squareup.dagger:dagger:1.2.2'
+  provided 'com.squareup.dagger:dagger-compiler:1.2.2'
+  compile 'com.squareup.flow:flow:1.0.0-alpha'
+
+  compile 'com.jakewharton.timber:timber:3.1.0'
+
+  compile 'com.squareup.retrofit2:retrofit:2.0.0-beta3'
+  compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta3'
+  compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta3'
+  compile 'com.squareup.okhttp3:okhttp:3.0.0-RC1'
+  compile 'com.squareup.okhttp3:logging-interceptor:3.0.0-RC1'
+
+  compile 'com.squareup.picasso:picasso:2.5.2'
+
+  testCompile 'junit:junit:4.12'
+  compile 'com.android.support:appcompat-v7:23.2.0'
+  compile 'com.android.support:design:23.2.0'
+  compile 'com.android.support:percent:23.2.0'
+  compile 'com.alexvasilkov:gesture-views:2.1.1'
+  compile 'com.jakewharton:butterknife:7.0.1'
+  compile 'com.nineoldandroids:library:2.4.0'
+  compile 'com.google.android.gms:play-services-maps:8.4.0'
+  compile 'com.android.support:recyclerview-v7:23.2.0'
+  testCompile 'com.android.support:support-annotations:23.2.0'
+
+  testCompile 'com.google.guava:guava:18.0'
+
+  testCompile('io.codearte.jfairy:jfairy:0.5.2') {
+    exclude group: 'asm', module: 'asm'
+    exclude group: 'org.slf4j', module: 'slf4j-api'
+  }
+
+  testCompile 'junit:junit:4.12'
+  testCompile 'org.mockito:mockito-core:2.0.31-beta'
+
+  testCompile('com.squareup.assertj:assertj-android:1.1.1') {
+    transitive = true
+    exclude group: 'com.android.support', module: 'support-annotations'
+  }
+  testCompile 'com.squareup.assertj:assertj-android-support-v4:1.1.1@aar'
+
+  testCompile('org.robolectric:robolectric:3.1-SNAPSHOT') {
+    exclude group: 'commons-logging', module: 'commons-logging'
+  }
+
+  testCompile 'org.robolectric:shadows-support-v4:3.1-SNAPSHOT'
+
+  tasks.withType(Test) {
+    testLogging {
+      events "skipped", "failed", "standardOut"
+    }
+  }
+
+}
+
+def getLocalIp(String interfaceName) {
+  NetworkInterface iface =  NetworkInterface.getByName(interfaceName);
+  for (InterfaceAddress address : iface.getInterfaceAddresses()) {
+    String ip =  address.getAddress().getHostAddress()
+    if (ip.length() <= 15) {
+      return ip;
+    }
+  }
+}

@@ -1,0 +1,11 @@
+<resources>
+  <string name="app_name">Utley</string>
+
+  <string name="google_maps_key" translatable="false" templateMergeStrategy="preserve">AIzaSyAk2RNhSyVnWwhknXhCHQylVAsFi-nBY3U</string>
+  <string name="register_username_hint">Username</string>
+  <string name="register_password_hint">Password</string>
+  <string name="controls_menu_logout">Logout</string>
+  <string name="okay">Okay</string>
+  <string name="controls_cash_available">CASH AVAILABLE FOR PICKUP</string>
+  <string name="controls_cash_amount_availble">$1%s AVAILABLE FOR PICKUP</string>
+</resources>
