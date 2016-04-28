@@ -23,6 +23,7 @@ import rx.Observable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyFloat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricGradleTestRunner.class)
@@ -59,4 +60,8 @@ public class HomeLayoutTest {
     assertThat(subject.isPaused).isTrue();
   }
 
+  @Test
+  public void onResme_subscribes() {
+    verify(api).getWeather(anyFloat(),anyFloat());
+  }
 }
