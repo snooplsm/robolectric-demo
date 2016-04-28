@@ -61,7 +61,14 @@ public class HomeLayoutTest {
   }
 
   @Test
-  public void onResme_subscribes() {
-    verify(api).getWeather(anyFloat(),anyFloat());
+  public void onResum_subscribes() {
+    verify(api).getWeather(anyFloat(), anyFloat());
+  }
+
+  @Test
+  public void onPause_unsubscribes() {
+    assertThat(subscriber.isUnsubscribed()).isFalse();
+    controller.pause();
+    assertThat(subscriber.isUnsubscribed()).isTrue();
   }
 }
